@@ -2,8 +2,9 @@ package thrift
 
 import (
 	"context"
-	endpoint "hello/pkg/endpoint"
-	addthrift "hello/pkg/thrift/gen-go/addsvc"
+
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	addthrift "github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 )
 
 type thriftServer struct {

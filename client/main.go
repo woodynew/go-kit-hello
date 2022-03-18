@@ -4,14 +4,15 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	client "hello/client/grpc"
-	thrift1 "hello/client/thrift"
-	service "hello/pkg/service"
-	addthrift "hello/pkg/thrift/gen-go/addsvc"
 	"os"
 	"strconv"
 	"text/tabwriter"
 	"time"
+
+	client "github.com/woodynew/go-kit-hello/client/grpc"
+	thrift1 "github.com/woodynew/go-kit-hello/client/thrift"
+	service "github.com/woodynew/go-kit-hello/pkg/service"
+	addthrift "github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 
 	grpc1 "github.com/go-kit/kit/transport/grpc"
 

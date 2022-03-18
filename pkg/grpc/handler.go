@@ -3,8 +3,9 @@ package grpc
 import (
 	"context"
 	"errors"
-	endpoint "hello/pkg/endpoint"
-	pb "hello/pkg/grpc/pb"
+
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	pb "github.com/woodynew/go-kit-hello/pkg/grpc/pb"
 
 	grpc "github.com/go-kit/kit/transport/grpc"
 )

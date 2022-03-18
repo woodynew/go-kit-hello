@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	http1 "github.com/go-kit/kit/transport/http"
-	endpoint "hello/pkg/endpoint"
 	"net/http"
+
+	http1 "github.com/go-kit/kit/transport/http"
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
 )
 
 // makeFooHandler creates the handler logic

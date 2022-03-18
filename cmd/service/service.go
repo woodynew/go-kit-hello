@@ -4,19 +4,22 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	endpoint "hello/pkg/endpoint"
-	grpc "hello/pkg/grpc"
-	pb "hello/pkg/grpc/pb"
-	http2 "hello/pkg/http"
-	service "hello/pkg/service"
-	thrift1 "hello/pkg/thrift"
 	"net"
 	http1 "net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
-	addthrift "hello/pkg/thrift/gen-go/addsvc"
+	prometheus "github.com/go-kit/kit/metrics/prometheus"
+	prometheus1 "github.com/prometheus/client_golang/prometheus"
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	grpc "github.com/woodynew/go-kit-hello/pkg/grpc"
+	pb "github.com/woodynew/go-kit-hello/pkg/grpc/pb"
+	http2 "github.com/woodynew/go-kit-hello/pkg/http"
+	service "github.com/woodynew/go-kit-hello/pkg/service"
+	thrift1 "github.com/woodynew/go-kit-hello/pkg/thrift"
+
+	addthrift "github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 
 	"github.com/apache/thrift/lib/go/thrift"
 	endpoint1 "github.com/go-kit/kit/endpoint"
@@ -163,14 +166,25 @@ func initThriftHandler(endpoints endpoint.Endpoints, g *group.Group) {
 
 func getServiceMiddleware(logger log.Logger) (mw []service.Middleware) {
 	mw = []service.Middleware{}
+	mw = addDefaultServiceMiddleware(logger, mw)
+	// mw = []service.Middleware{service.LoggingMiddleware(logger), service.HiMiddleware()}
 
 	return
 }
 func getEndpointMiddleware(logger log.Logger) (mw map[string][]endpoint1.Middleware) {
 	mw = map[string][]endpoint1.Middleware{}
+	duration := prometheus.NewSummaryFrom(prometheus1.SummaryOpts{
+		Help:      "Request duration in seconds.",
+		Name:      "request_duration_seconds",
+		Namespace: "example",
+		Subsystem: "hello",
+	}, []string{"method", "success"})
+	addDefaultEndpointMiddleware(logger, duration, mw)
+	// Add you endpoint middleware here
 
 	return
 }
+
 func initMetricsEndpoint(g *group.Group) {
 	http1.DefaultServeMux.Handle("/metrics", promhttp.Handler())
 	debugListener, err := net.Listen("tcp", *debugAddr)

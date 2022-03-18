@@ -9,8 +9,11 @@ import (
 	http "github.com/go-kit/kit/transport/http"
 	group "github.com/oklog/oklog/pkg/group"
 	opentracinggo "github.com/opentracing/opentracing-go"
-	endpoint "hello/pkg/endpoint"
-	http1 "hello/pkg/http"
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	http1 "github.com/woodynew/go-kit-hello/pkg/http"
+	service "github.com/woodynew/go-kit-hello/pkg/service"
+	prometheus "github.com/go-kit/kit/metrics/prometheus"
+
 )
 
 func createService(endpoints endpoint.Endpoints) (g *group.Group) {
@@ -32,9 +35,18 @@ func defaultGRPCOptions(logger log.Logger, tracer opentracinggo.Tracer) map[stri
 	options := map[string][]grpc.ServerOption{"Foo": {grpc.ServerErrorLogger(logger), grpc.ServerBefore(opentracing.GRPCToContext(tracer, "Foo", logger))}}
 	return options
 }
+func addDefaultEndpointMiddleware(logger log.Logger, duration *prometheus.Summary, mw map[string][]endpoint1.Middleware) {
+	mw["Foo"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "Foo")), endpoint.InstrumentingMiddleware(duration.With("method", "Foo"))}
+	mw["Sum"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "Sum")), endpoint.InstrumentingMiddleware(duration.With("method", "Sum"))}
+	mw["Concat"] = []endpoint1.Middleware{endpoint.LoggingMiddleware(log.With(logger, "method", "Concat")), endpoint.InstrumentingMiddleware(duration.With("method", "Concat"))}
+}
+func addDefaultServiceMiddleware(logger log.Logger, mw []service.Middleware) []service.Middleware {
+	return append(mw, service.LoggingMiddleware(logger))
+}
 func addEndpointMiddlewareToAllMethods(mw map[string][]endpoint1.Middleware, m endpoint1.Middleware) {
 	methods := []string{"Foo", "Sum", "Concat"}
 	for _, v := range methods {
 		mw[v] = append(mw[v], m)
 	}
 }
+

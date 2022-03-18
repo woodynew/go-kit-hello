@@ -1,4 +1,4 @@
-module hello
+module github.com/woodynew/go-kit-hello
 
 go 1.18
 

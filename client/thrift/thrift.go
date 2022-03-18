@@ -3,9 +3,10 @@ package thrift
 import (
 	"context"
 	"errors"
-	endpoint1 "hello/pkg/endpoint"
-	service "hello/pkg/service"
 	"time"
+
+	endpoint1 "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	service "github.com/woodynew/go-kit-hello/pkg/service"
 
 	"github.com/go-kit/kit/circuitbreaker"
 	endpoint "github.com/go-kit/kit/endpoint"
@@ -13,7 +14,7 @@ import (
 	"github.com/sony/gobreaker"
 	"golang.org/x/time/rate"
 
-	addthrift "hello/pkg/thrift/gen-go/addsvc"
+	addthrift "github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 )
 
 // NewThriftClient returns an AddService backed by a Thrift server described by

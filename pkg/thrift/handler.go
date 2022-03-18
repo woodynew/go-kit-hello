@@ -3,8 +3,9 @@ package thrift
 import (
 	"context"
 	"errors"
-	endpoint "hello/pkg/endpoint"
-	addthrift "hello/pkg/thrift/gen-go/addsvc"
+
+	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
+	addthrift "github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 )
 
 func (s *thriftServer) Foo(ctx context.Context, a string) (*addthrift.FooReply, error) {
