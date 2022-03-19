@@ -12,6 +12,7 @@ import (
 
 	prometheus "github.com/go-kit/kit/metrics/prometheus"
 	prometheus1 "github.com/prometheus/client_golang/prometheus"
+	"github.com/spf13/cast"
 	endpoint "github.com/woodynew/go-kit-hello/pkg/endpoint"
 	grpc "github.com/woodynew/go-kit-hello/pkg/grpc"
 	pb "github.com/woodynew/go-kit-hello/pkg/grpc/pb"
@@ -46,7 +47,7 @@ var grpcAddr = fs.String("grpc-addr", ":8082", "gRPC listen address")
 var thriftAddr = fs.String("thrift-addr", ":8083", "Thrift listen address")
 var thriftProtocol = fs.String("thrift-protocol", "binary", "binary, compact, json, simplejson")
 var thriftBuffer = fs.Int("thrift-buffer", 0, "0 for unbuffered")
-var thriftFramed = fs.Bool("thrift-framed", false, "true to enable framing")
+var thriftFramed = fs.Bool("thrift-framed", true, "true to enable framing")
 var zipkinURL = fs.String("zipkin-url", "", "Enable Zipkin tracing via a collector URL e.g. http://localhost:9411/api/v1/spans")
 var lightstepToken = fs.String("lightstep-token", "", "Enable LightStep tracing via a LightStep access token")
 var appdashAddr = fs.String("appdash-addr", "", "Enable Appdash tracing via an Appdash server host:port")
@@ -149,9 +150,11 @@ func initThriftHandler(endpoints endpoint.Endpoints, g *group.Group) {
 		} else {
 			transportFactory = thrift.NewTTransportFactory()
 		}
+
 		if *thriftFramed {
 			transportFactory = thrift.NewTFramedTransportFactory(transportFactory)
 		}
+		fmt.Println(cast.ToString(thriftBuffer), cast.ToString(thriftFramed))
 
 		return thrift.NewTSimpleServer4(
 			addthrift.NewAddServiceProcessor(thriftServer),

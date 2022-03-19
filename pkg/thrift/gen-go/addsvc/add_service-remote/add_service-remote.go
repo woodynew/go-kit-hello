@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"github.com/apache/thrift/lib/go/thrift"
-	"hello/pkg/thrift/gen-go/addsvc"
+	"github.com/woodynew/go-kit-hello/pkg/thrift/gen-go/addsvc"
 )
 
 var _ = addsvc.GoUnusedProtection__
